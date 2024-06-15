@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
 import posts from '@/data/posts';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -39,6 +40,8 @@ interface PostEditPageProps {
 }
 
 const PostEditPage = ({ params }: PostEditPageProps) => {
+  const { toast } = useToast();
+
   const post = posts.find((post) => post.id === params.id);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +55,10 @@ const PostEditPage = ({ params }: PostEditPageProps) => {
   });
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data);
+    toast({
+      title: 'Post has been updated successfully',
+      description: `Updated by ${post?.author} on ${post?.date}`,
+    });
   };
 
   return (
@@ -141,7 +147,9 @@ const PostEditPage = ({ params }: PostEditPageProps) => {
             )}
           />
 
-          <Button className='w-full dark:bg-slate-800 dark:text-white'>Update Post</Button>
+          <Button className="w-full dark:bg-slate-800 dark:text-white">
+            Update Post
+          </Button>
         </form>
       </Form>
     </>
